@@ -9,20 +9,41 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { getTrendingMedia } from "@/lib/api/trending";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export default function Trending() {
+  const [timeWindow, setTimeWindow] = useState<"day" | "week">("day");
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["trending"],
-    queryFn: () => getTrendingMedia(),
+    queryKey: ["trending", timeWindow],
+    queryFn: () => getTrendingMedia(timeWindow),
   });
 
   if (error) return <div>{error.message}</div>;
 
   return (
     <section>
-      <h1 className="font-semibold text-3xl my-4 text-foreground">Trending</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-semibold text-3xl my-4 text-foreground">
+          Trending
+        </h1>
+
+        <ToggleGroup
+          variant="outline"
+          value={[timeWindow]}
+          onValueChange={(value) => {
+            if (value[0] === "day" || value[0] === "week") {
+              setTimeWindow(value[0]);
+            }
+          }}
+        >
+          <ToggleGroupItem value="day">Today</ToggleGroupItem>
+          <ToggleGroupItem value="week">This Week</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
 
       <Carousel opts={{ align: "start" }} className="w-full">
         <CarouselContent>

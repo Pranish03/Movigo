@@ -6,8 +6,10 @@ type TrendingMediaResponse = {
   total_pages: number;
 };
 
-export async function getTrendingMedia(): Promise<TrendingMediaResponse> {
-  const res = await fetch("/api/trending");
+export async function getTrendingMedia(
+  timeWindow: string,
+): Promise<TrendingMediaResponse> {
+  const res = await fetch(`/api/trending?time_window=${timeWindow}`);
 
   if (!res.ok) throw new Error("Failed to fetch trending medias");
 
