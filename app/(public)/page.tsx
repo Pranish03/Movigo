@@ -1,4 +1,5 @@
 import PopularMovies from "./_components/popular-movies";
+import PopularTvShows from "./_components/popular-tv-shows";
 import Trending from "./_components/trending";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <div className="max-w-300 mx-auto py-4 space-y-10">
       <Trending />
       <PopularMovies />
+      <PopularTvShows />
     </div>
   );
 }
