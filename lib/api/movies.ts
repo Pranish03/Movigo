@@ -1,12 +1,7 @@
-export type Movie = {
-  id: number;
-  title: string;
-  poster_path: string;
-  release_date: string;
-};
+import { Media } from "@/utils/types";
 
 type PopularMoviesResponse = {
-  results: Movie[];
+  results: Media[];
   page: number;
   total_pages: number;
 };

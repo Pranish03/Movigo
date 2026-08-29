@@ -12,7 +12,7 @@ import {
 import { getPopularMovies } from "@/lib/api/movies";
 import { useQuery } from "@tanstack/react-query";
 
-export default function PopularMovie() {
+export default function PopularMovies() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["movies", "popular"],
     queryFn: () => getPopularMovies(),
@@ -36,7 +36,11 @@ export default function PopularMovie() {
               ))
             : data?.results.map((movie) => (
                 <CarouselItem key={movie.id} className="basis-1/6">
-                  <MediaCard movie={movie} />
+                  <MediaCard
+                    poster_path={movie.poster_path}
+                    title={movie.title}
+                    release_date={movie.release_date}
+                  />
                 </CarouselItem>
               ))}
         </CarouselContent>
