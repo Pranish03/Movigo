@@ -6,8 +6,7 @@ export default function Navbar() {
   return (
     <nav className="w-full max-w-300 mx-auto flex items-center justify-between my-4">
       <Link href="/" className="text-3xl font-bold">
-        Movi
-        <span className="text-blue-500">go</span>
+        Movi<span className="text-blue-500">Go</span>.
       </Link>
 
       <ModeToggle />

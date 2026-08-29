@@ -9,22 +9,39 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { getPopularMovies } from "@/lib/api/movies";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { getPopularMedia } from "@/lib/api/popular";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-export default function PopularMovies() {
+export default function Popular() {
+  const [mediaType, setMediaType] = useState<"movie" | "tv">("movie");
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["movies", "popular"],
-    queryFn: () => getPopularMovies(),
+    queryKey: ["popular", mediaType],
+    queryFn: () => getPopularMedia(mediaType),
   });
 
   if (error) return <div>{error.message}</div>;
 
   return (
     <section>
-      <h1 className="font-semibold text-3xl my-4 text-foreground">
-        Popular Movies
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-semibold text-3xl my-4 text-foreground">Popular</h1>
+
+        <ToggleGroup
+          variant="outline"
+          value={[mediaType]}
+          onValueChange={(value) => {
+            if (value[0] === "movie" || value[0] === "tv") {
+              setMediaType(value[0]);
+            }
+          }}
+        >
+          <ToggleGroupItem value="movie">Movies</ToggleGroupItem>
+          <ToggleGroupItem value="tv">Tv Shows</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
 
       <Carousel opts={{ align: "start" }} className="w-full">
         <CarouselContent>
