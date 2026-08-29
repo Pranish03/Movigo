@@ -1,6 +1,7 @@
 "use client";
 
 import MediaCard from "@/components/shared/media-card";
+import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
 import {
   Carousel,
   CarouselContent,
@@ -17,7 +18,6 @@ export default function PopularMovie() {
     queryFn: () => getPopularMovies(),
   });
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
   return (
@@ -28,11 +28,17 @@ export default function PopularMovie() {
 
       <Carousel opts={{ align: "start" }} className="w-full">
         <CarouselContent>
-          {data?.results.map((movie) => (
-            <CarouselItem key={movie.id} className="basis-1/6">
-              <MediaCard movie={movie} />
-            </CarouselItem>
-          ))}
+          {isLoading
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <CarouselItem key={i} className="basis-1/6">
+                  <MediaCardSkeleton />
+                </CarouselItem>
+              ))
+            : data?.results.map((movie) => (
+                <CarouselItem key={movie.id} className="basis-1/6">
+                  <MediaCard movie={movie} />
+                </CarouselItem>
+              ))}
         </CarouselContent>
 
         <CarouselPrevious />
