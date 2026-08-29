@@ -8,6 +8,7 @@ export default function MediaCard({
   title,
   name,
   release_date,
+  first_air_date,
 }: Media) {
   return (
     <div>
@@ -20,10 +21,10 @@ export default function MediaCard({
         />
       </div>
       <h2 className="font-semibold line-clamp-1 text-lg text-foreground">
-        {title || name}
+        {title ?? name}
       </h2>
       <p className="text-muted-foreground text-sm">
-        {formatReleaseDate(release_date)}
+        {formatReleaseDate(release_date || first_air_date || "")}
       </p>
     </div>
   );
