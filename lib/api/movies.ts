@@ -1,5 +1,3 @@
-import { tmdbClient } from "@/lib/axios";
-
 export type Movie = {
   id: number;
   title: string;
@@ -13,11 +11,10 @@ type PopularMoviesResponse = {
   total_pages: number;
 };
 
-export async function getPopularMovies(page = 1) {
-  const { data } = await tmdbClient.get<PopularMoviesResponse>(
-    "/movie/popular",
-    { params: page },
-  );
+export async function getPopularMovies(): Promise<PopularMoviesResponse> {
+  const res = await fetch("/api/movies/popular");
 
-  return data;
+  if (!res.ok) throw new Error("Failed to fetch movies");
+
+  return res.json();
 }
