@@ -16,8 +16,12 @@ type GenreResponse = {
 export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
+  sortBy: string = "popularity.desc",
 ): Promise<MediaResponse> {
-  const params = new URLSearchParams({ media_type: mediaType });
+  const params = new URLSearchParams({
+    media_type: mediaType,
+    sort_by: sortBy,
+  });
 
   if (genreIds.length > 0) {
     params.set("with_genres", genreIds.join(","));

@@ -5,10 +5,14 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const mediaType = searchParams.get("media_type") ?? "movie";
   const withGenres = searchParams.get("with_genres");
+  const sortBy = searchParams.get("sort_by") ?? "popularity.desc";
 
   try {
     const { data } = await tmdbClient.get(`/discover/${mediaType}`, {
-      params: withGenres ? { with_genres: withGenres } : {},
+      params: {
+        sort_by: sortBy,
+        ...(withGenres && { with_genres: withGenres }),
+      },
     });
     return NextResponse.json(data);
   } catch {
