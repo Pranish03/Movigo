@@ -11,8 +11,8 @@ export default function MoviesPage() {
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["movie", "discover"],
-    queryFn: () => discoverMedia("movie"),
+    queryKey: ["movie", "discover", selectedGenres],
+    queryFn: () => discoverMedia("movie", selectedGenres),
   });
 
   if (error) return <div>{error.message}</div>;

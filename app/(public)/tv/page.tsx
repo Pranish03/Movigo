@@ -4,20 +4,32 @@ import MediaCard from "@/components/shared/media-card";
 import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
 import { discoverMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import GenreCombobox from "../_components/genre-combobox";
 
-export default function MoviesPage() {
+export default function TvShowsPage() {
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["tv", "discover"],
-    queryFn: () => discoverMedia("tv"),
+    queryKey: ["tv", "discover", selectedGenres],
+    queryFn: () => discoverMedia("tv", selectedGenres),
   });
 
   if (error) return <div>{error.message}</div>;
 
   return (
     <div className="max-w-300 mx-auto px-4">
-      <h1 className="font-bold text-3xl mt-14 mb-10 text-foreground">
-        Discover Tv Shows
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-bold text-3xl mt-14 mb-10 text-foreground">
+          Discover Tv Shows
+        </h1>
+
+        <GenreCombobox
+          mediaType="tv"
+          value={selectedGenres}
+          onChange={setSelectedGenres}
+        />
+      </div>
       <div className="grid grid-cols-6 gap-x-4 gap-y-6">
         {isLoading
           ? Array.from({ length: 12 }).map((_, i) => (

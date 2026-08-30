@@ -13,8 +13,17 @@ type GenreResponse = {
   }[];
 };
 
-export async function discoverMedia(mediaType: string): Promise<MediaResponse> {
-  const res = await fetch(`/api/media/discover?media_type=${mediaType}`);
+export async function discoverMedia(
+  mediaType: string,
+  genreIds: number[] = [],
+): Promise<MediaResponse> {
+  const params = new URLSearchParams({ media_type: mediaType });
+
+  if (genreIds.length > 0) {
+    params.set("with_genres", genreIds.join(","));
+  }
+
+  const res = await fetch(`/api/media/discover?${params.toString()}`);
 
   if (!res.ok) throw new Error("Failed to fetch discover movies");
 
