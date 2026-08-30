@@ -4,7 +4,7 @@ import MediaCard from "@/components/shared/media-card";
 import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
 import { discoverMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GenreCombobox from "../_components/genre-combobox";
 import SortingSelect, { SortOption } from "../_components/sorting-select";
 import {
@@ -20,11 +20,20 @@ export default function MoviesPage() {
   const [sortBy, setSortBy] = useState<SortOption>("popularity.desc");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [page, setPage] = useState(1);
+  const isFirstRender = useRef(true);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["movie", "discover", selectedGenres, sortBy, page],
     queryFn: () => discoverMedia("movie", selectedGenres, sortBy, page),
   });
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   if (error) return <div>{error.message}</div>;
 
