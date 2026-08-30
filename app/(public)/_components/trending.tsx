@@ -27,9 +27,7 @@ export default function Trending() {
   return (
     <section>
       <div className="flex items-center justify-between">
-        <h1 className="font-semibold text-3xl my-4 text-foreground">
-          Trending
-        </h1>
+        <h1 className="font-bold text-3xl my-4 text-foreground">Trending</h1>
 
         <ToggleGroup
           variant="outline"

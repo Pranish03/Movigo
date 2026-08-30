@@ -40,10 +40,10 @@ export default function Hero() {
       <div className="absolute inset-0 bg-linear-to-t from-background from-0% via-background/70 via-40% to-transparent to-100%" />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
+        <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-foreground drop-shadow-lg sm:text-5xl md:text-6xl">
           Explore movies & shows worth watching
         </h1>
-        <p className="mt-4 max-w-xl text-base text-white/80 sm:text-lg">
+        <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
           Browse trending movies and TV shows, explore detailed info, and find
           your next favorite watch — all in one place.
         </p>
