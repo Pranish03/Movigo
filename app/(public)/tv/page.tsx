@@ -56,7 +56,7 @@ export default function TvShowsPage() {
           Discover Tv Shows
         </h1>
 
-        <div className="flex items-center gap-4 w-full">
+        <div className="flex items-center justify-end gap-4 w-full">
           <SortingSelect value={sortBy} onChange={handleSortChange} />
 
           <GenreCombobox
