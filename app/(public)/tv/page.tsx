@@ -6,29 +6,35 @@ import { discoverMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import GenreCombobox from "../_components/genre-combobox";
+import SortingSelect, { SortOption } from "../_components/sorting-select";
 
 export default function TvShowsPage() {
+  const [sortBy, setSortBy] = useState<SortOption>("popularity.desc");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["tv", "discover", selectedGenres],
-    queryFn: () => discoverMedia("tv", selectedGenres),
+    queryKey: ["tv", "discover", selectedGenres, sortBy],
+    queryFn: () => discoverMedia("tv", selectedGenres, sortBy),
   });
 
   if (error) return <div>{error.message}</div>;
 
   return (
     <div className="max-w-300 mx-auto px-4">
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-3xl mt-14 mb-10 text-foreground">
+      <div className="flex items-center justify-between mt-14 mb-10">
+        <h1 className="font-bold text-3xl text-foreground w-full">
           Discover Tv Shows
         </h1>
 
-        <GenreCombobox
-          mediaType="tv"
-          value={selectedGenres}
-          onChange={setSelectedGenres}
-        />
+        <div className="flex items-center gap-4 w-full">
+          <SortingSelect value={sortBy} onChange={setSortBy} />
+
+          <GenreCombobox
+            mediaType="tv"
+            value={selectedGenres}
+            onChange={setSelectedGenres}
+          />
+        </div>
       </div>
       <div className="grid grid-cols-6 gap-x-4 gap-y-6">
         {isLoading

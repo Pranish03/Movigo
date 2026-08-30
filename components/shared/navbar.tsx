@@ -11,7 +11,7 @@ export default function Navbar() {
           Movi<span className="text-blue-500">Go</span>.
         </Link>
 
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+        <div className="hidden md:flex items-center gap-6 text-md font-medium text-muted-foreground">
           <Link href="/movies" className="hover:text-foreground">
             Movies
           </Link>
