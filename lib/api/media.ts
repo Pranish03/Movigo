@@ -6,6 +6,13 @@ type MediaResponse = {
   total_pages: number;
 };
 
+type GenreResponse = {
+  genres: {
+    id: number;
+    name: string;
+  };
+};
+
 export async function discoverMedia(mediaType: string): Promise<MediaResponse> {
   const res = await fetch(`/api/media/discover?media_type=${mediaType}`);
 
@@ -40,6 +47,16 @@ export async function getTrendingMedia(
   const res = await fetch(`/api/media/trending?time_window=${timeWindow}`);
 
   if (!res.ok) throw new Error("Failed to fetch trending medias");
+
+  return res.json();
+}
+
+export async function getMediaGenres(
+  mediaType: string,
+): Promise<GenreResponse> {
+  const res = await fetch(`/api/media/genres?media_type=${mediaType}`);
+
+  if (!res.ok) throw new Error(`Failed to fetch ${mediaType} genres`);
 
   return res.json();
 }
