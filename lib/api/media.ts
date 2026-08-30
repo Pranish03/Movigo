@@ -10,7 +10,7 @@ type GenreResponse = {
   genres: {
     id: number;
     name: string;
-  };
+  }[];
 };
 
 export async function discoverMedia(mediaType: string): Promise<MediaResponse> {
