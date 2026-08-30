@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch {
     return NextResponse.json(
-      { error: "Failed to fetch trending" },
+      { error: "Failed to fetch popular" },
       { status: 500 },
     );
   }
