@@ -21,6 +21,17 @@ export type MediaDetails = Media & {
   vote_average: number;
 };
 
+export type CastMember = {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+};
+
+type CreditsResponse = {
+  cast: CastMember[];
+};
+
 export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
@@ -91,6 +102,17 @@ export async function getMediaDetails(
   const res = await fetch(`/api/media/${mediaType}/${id}`);
 
   if (!res.ok) throw new Error("Failed to fetch media details");
+
+  return res.json();
+}
+
+export async function getMediaCredits(
+  mediaType: string,
+  id: string,
+): Promise<CreditsResponse> {
+  const res = await fetch(`/api/media/${mediaType}/${id}/credits`);
+
+  if (!res.ok) throw new Error("Failed to fetch credits");
 
   return res.json();
 }
