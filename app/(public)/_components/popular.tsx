@@ -18,7 +18,7 @@ export default function Popular() {
   const [mediaType, setMediaType] = useState<"movie" | "tv">("movie");
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["popular", mediaType],
+    queryKey: [mediaType, "popular"],
     queryFn: () => getPopularMedia(mediaType),
   });
 

@@ -18,7 +18,7 @@ export default function TopRated() {
   const [mediaType, setMediaType] = useState<"movie" | "tv">("movie");
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["top-rated", mediaType],
+    queryKey: [mediaType, "top-rated"],
     queryFn: () => getTopRatedMedia(mediaType),
   });
 
