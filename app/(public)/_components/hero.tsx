@@ -1,12 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getNowPlaying } from "@/lib/api/movies";
 import Image from "next/image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/constants";
 import { Media } from "@/utils/types";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Play, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 function pickRandomMovie(data: { results: Media[] }): Media | null {
   const withBackdrop = data.results.filter((m) => m.backdrop_path);
@@ -17,23 +21,33 @@ function pickRandomMovie(data: { results: Media[] }): Media | null {
 }
 
 export default function Hero() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const { data: randomMovie, isLoading } = useQuery({
     queryKey: ["movies", "now-playing"],
     queryFn: getNowPlaying,
     select: pickRandomMovie,
   });
 
-  if (isLoading || !randomMovie) return null;
-
   return (
     <div className="relative h-[70vh] min-h-125 w-full overflow-hidden">
-      <Image
-        src={`${TMDB_IMAGE_BASE_URL}/original${randomMovie.backdrop_path}`}
-        alt={randomMovie.title || "backdrop image"}
-        fill
-        className="object-cover"
-        priority
-      />
+      {(isLoading || !randomMovie || !imageLoaded) && (
+        <Skeleton className="absolute inset-0 h-full w-full rounded-none" />
+      )}
+
+      {randomMovie && (
+        <Image
+          src={`${TMDB_IMAGE_BASE_URL}/original${randomMovie.backdrop_path}`}
+          alt={randomMovie.title || "backdrop image"}
+          fill
+          className={cn(
+            "object-cover transition-opacity duration-500",
+            imageLoaded ? "opacity-100" : "opacity-0",
+          )}
+          priority
+          onLoad={() => setImageLoaded(true)}
+        />
+      )}
 
       <div className="absolute inset-0 bg-black/40" />
       <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/50" />
@@ -49,18 +63,27 @@ export default function Hero() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button size="lg" className="gap-2">
+          <Link
+            className={buttonVariants({ size: "lg", className: "gap-2" })}
+            href="/movies"
+          >
             <Play className="size-4 fill-current" />
             Start Exploring
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="gap-2 border-white/30 bg-white/5 text-white hover:bg-white/10"
+          </Link>
+
+          <Link
+            className={buttonVariants({
+              variant: "outline",
+              size: "lg",
+              className:
+                "gap-2 border-white/30 bg-white/5 text-white hover:bg-white/10",
+            })}
+            href="https://www.github.com/Pranish03/Movigo"
+            target="_blank"
           >
             <Info className="size-4" />
             Learn More
-          </Button>
+          </Link>
         </div>
       </div>
     </div>
