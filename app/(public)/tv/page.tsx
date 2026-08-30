@@ -7,8 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function MoviesPage() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["movie", "discover"],
-    queryFn: () => discoverMedia("movie"),
+    queryKey: ["tv", "discover"],
+    queryFn: () => discoverMedia("tv"),
   });
 
   if (error) return <div>{error.message}</div>;
@@ -16,7 +16,7 @@ export default function MoviesPage() {
   return (
     <div className="max-w-300 mx-auto px-4">
       <h1 className="font-bold text-3xl mt-14 mb-10 text-foreground">
-        Discover Movies
+        Discover Tv Shows
       </h1>
       <div className="grid grid-cols-6 gap-x-4 gap-y-6">
         {isLoading
