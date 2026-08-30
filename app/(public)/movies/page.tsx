@@ -2,7 +2,7 @@
 
 import MediaCard from "@/components/shared/media-card";
 import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
-import { discoverMedia } from "@/lib/api/discover";
+import { discoverMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
 
 export default function MoviesPage() {

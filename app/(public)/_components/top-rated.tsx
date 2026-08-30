@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { getTopRatedMedia } from "@/lib/api/top-rated";
+import { getTopRatedMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
