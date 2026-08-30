@@ -24,32 +24,34 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 
-export default function MovieDetailClient({ id }: { id: string }) {
+export default function TvDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["movie", "details", id],
-    queryFn: () => getMediaDetails("movie", id),
+    queryKey: ["tv", "details", id],
+    queryFn: () => getMediaDetails("tv", id),
   });
 
   const { data: credits } = useQuery({
-    queryKey: ["movie", "credits", id],
-    queryFn: () => getMediaCredits("movie", id),
+    queryKey: ["tv", "credits", id],
+    queryFn: () => getMediaCredits("tv", id),
   });
 
   const { data: similar, isLoading: isSimilarLoading } = useQuery({
-    queryKey: ["movie", "similar", id],
-    queryFn: () => getSimilarMedia("movie", id),
+    queryKey: ["tv", "similar", id],
+    queryFn: () => getSimilarMedia("tv", id),
   });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
   if (!data) return null;
 
+  const runtime = data.episode_run_time?.[0];
+
   return (
     <div>
       <div className="relative h-[54vh] min-h-125 w-full overflow-hidden">
         <Image
           src={`${TMDB_IMAGE_BASE_URL}/original${data.backdrop_path}`}
-          alt={data.title || "backdrop image"}
+          alt={data.name || "backdrop image"}
           fill
           className="object-cover"
           priority
@@ -64,7 +66,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
             <div className="relative w-48 md:w-64 aspect-2/3 rounded-xl overflow-hidden shrink-0 shadow-xl">
               <Image
                 src={`${TMDB_IMAGE_BASE_URL}/w500${data.poster_path}`}
-                alt={data.title || "poster"}
+                alt={data.name || "poster"}
                 fill
                 className="object-cover"
               />
@@ -72,7 +74,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
 
             <div className="flex flex-col justify-end p-4">
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                {data.title}
+                {data.name}
               </h1>
 
               <div className="flex flex-wrap items-center gap-3 mt-3 text-sm text-muted-foreground">
@@ -81,12 +83,19 @@ export default function MovieDetailClient({ id }: { id: string }) {
                   {data.vote_average.toFixed(1)}
                 </div>
                 <span>•</span>
-                <span>{formatReleaseDate(data.release_date || "")}</span>
-                {data.runtime && (
+                <span>{formatReleaseDate(data.first_air_date || "")}</span>
+                {runtime && (
+                  <>
+                    <span>•</span>
+                    <span>{runtime}m per episode</span>
+                  </>
+                )}
+                {data.number_of_seasons && (
                   <>
                     <span>•</span>
                     <span>
-                      {Math.floor(data.runtime / 60)}h {data.runtime % 60}m
+                      {data.number_of_seasons} Season
+                      {data.number_of_seasons > 1 ? "s" : ""}
                     </span>
                   </>
                 )}
@@ -117,7 +126,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
 
       {credits?.cast && credits.cast.length > 0 && (
         <div className="max-w-300 mx-auto px-4">
-          <h2 className="text-2xl font-semibold text-foreground mb-6">Casts</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-6">Cast</h2>
           <Carousel opts={{ align: "start" }} className="w-full">
             <CarouselContent>
               {credits.cast.slice(0, 15).map((member) => (
@@ -152,7 +161,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
                   ))
                 : similar?.results.map((media) => (
                     <CarouselItem key={media.id} className="basis-1/5">
-                      <Link href={`/movies/${media.id}`}>
+                      <Link href={`/tv/${media.id}`}>
                         <MediaCard
                           poster_path={media.poster_path}
                           title={media?.title}

@@ -1,8 +1,10 @@
-interface IdProps {
-  params: Promise<{ id: "string" }>;
-}
+import TvDetailClient from "./tv-detail-client";
 
-export default async function TvShowDetailPage({ params }: IdProps) {
+type IdProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function TvDetailPage({ params }: IdProps) {
   const { id } = await params;
-  return <div>MoviePage {id}</div>;
+  return <TvDetailClient id={id} />;
 }

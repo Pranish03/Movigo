@@ -16,6 +16,9 @@ type GenreResponse = {
 export type MediaDetails = Media & {
   overview: string;
   runtime?: number;
+  episode_run_time?: number[];
+  number_of_seasons?: number;
+  number_of_episodes?: number;
   genres: { id: number; name: string }[];
   backdrop_path: string;
   vote_average: number;
