@@ -12,6 +12,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { getTopRatedMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function TopRated() {
@@ -53,13 +54,17 @@ export default function TopRated() {
               ))
             : data?.results.map((media) => (
                 <CarouselItem key={media.id} className="basis-1/5">
-                  <MediaCard
-                    poster_path={media.poster_path}
-                    title={media?.title}
-                    name={media?.name}
-                    release_date={media?.release_date}
-                    first_air_date={media?.first_air_date}
-                  />
+                  <Link
+                    href={`/${mediaType === "movie" ? "movies" : "tv"}/${media.id}`}
+                  >
+                    <MediaCard
+                      poster_path={media.poster_path}
+                      title={media?.title}
+                      name={media?.name}
+                      release_date={media?.release_date}
+                      first_air_date={media?.first_air_date}
+                    />
+                  </Link>
                 </CarouselItem>
               ))}
         </CarouselContent>
