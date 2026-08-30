@@ -70,7 +70,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
               />
             </div>
 
-            <div className="flex flex-col justify-start p-4">
+            <div className="flex flex-col justify-end p-4">
               <h1 className="text-3xl md:text-4xl font-bold text-foreground">
                 {data.title}
               </h1>
@@ -134,7 +134,7 @@ export default function MovieDetailClient({ id }: { id: string }) {
 
       {(isSimilarLoading ||
         (similar?.results && similar.results.length > 0)) && (
-        <div className="max-w-300 mx-auto px-4 mt-16 pb-10">
+        <div className="max-w-300 mx-auto px-4 mt-16 pb-6">
           <h2 className="text-2xl font-semibold text-foreground mb-6">
             More Like This
           </h2>
