@@ -116,3 +116,14 @@ export async function getMediaCredits(
 
   return res.json();
 }
+
+export async function getSimilarMedia(
+  mediaType: string,
+  id: string,
+): Promise<MediaResponse> {
+  const res = await fetch(`/api/media/${mediaType}/${id}/similar`);
+
+  if (!res.ok) throw new Error("Failed to fetch similar media");
+
+  return res.json();
+}

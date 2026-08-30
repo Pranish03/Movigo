@@ -1,7 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getMediaDetails, getMediaCredits } from "@/lib/api/media";
+import {
+  getMediaDetails,
+  getMediaCredits,
+  getSimilarMedia,
+} from "@/lib/api/media";
 import Image from "next/image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/constants";
 import { formatReleaseDate } from "@/utils/format-date";
@@ -9,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { Play, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CastCard from "@/components/shared/cast-card";
+import MediaCard from "@/components/shared/media-card";
+import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
 import {
   Carousel,
   CarouselContent,
@@ -16,6 +22,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default function MovieDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
@@ -26,6 +33,11 @@ export default function MovieDetailClient({ id }: { id: string }) {
   const { data: credits } = useQuery({
     queryKey: ["movie", "credits", id],
     queryFn: () => getMediaCredits("movie", id),
+  });
+
+  const { data: similar, isLoading: isSimilarLoading } = useQuery({
+    queryKey: ["movie", "similar", id],
+    queryFn: () => getSimilarMedia("movie", id),
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -113,6 +125,40 @@ export default function MovieDetailClient({ id }: { id: string }) {
                   <CastCard {...member} />
                 </CarouselItem>
               ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+      )}
+
+      {(isSimilarLoading ||
+        (similar?.results && similar.results.length > 0)) && (
+        <div className="max-w-300 mx-auto px-4 mt-16 pb-10">
+          <h2 className="text-2xl font-semibold text-foreground mb-6">
+            More Like This
+          </h2>
+          <Carousel opts={{ align: "start" }} className="w-full">
+            <CarouselContent>
+              {isSimilarLoading
+                ? Array.from({ length: 5 }).map((_, i) => (
+                    <CarouselItem key={i} className="basis-1/5">
+                      <MediaCardSkeleton />
+                    </CarouselItem>
+                  ))
+                : similar?.results.map((media) => (
+                    <CarouselItem key={media.id} className="basis-1/5">
+                      <Link href={`/movies/${media.id}`}>
+                        <MediaCard
+                          poster_path={media.poster_path}
+                          title={media?.title}
+                          name={media?.name}
+                          release_date={media?.release_date}
+                          first_air_date={media?.first_air_date}
+                        />
+                      </Link>
+                    </CarouselItem>
+                  ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
