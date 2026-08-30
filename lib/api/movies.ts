@@ -13,11 +13,3 @@ export async function getNowPlaying(): Promise<PopularMediaResponse> {
 
   return res.json();
 }
-
-export async function getDiscoverMovies(): Promise<PopularMediaResponse> {
-  const res = await fetch("/api/movies/discover");
-
-  if (!res.ok) throw new Error("Failed to fetch discover movies");
-
-  return res.json();
-}
