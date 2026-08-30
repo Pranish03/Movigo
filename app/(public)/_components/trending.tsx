@@ -12,6 +12,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { getTrendingMedia } from "@/lib/api/media";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Trending() {
@@ -53,12 +54,16 @@ export default function Trending() {
               ))
             : data?.results.map((media) => (
                 <CarouselItem key={media.id} className="basis-1/5">
-                  <MediaCard
-                    poster_path={media.poster_path}
-                    name={media?.name}
-                    title={media?.title}
-                    release_date={media.release_date}
-                  />
+                  <Link
+                    href={`/${media.media_type === "movie" ? "movies" : "tv"}/${media.id}`}
+                  >
+                    <MediaCard
+                      poster_path={media.poster_path}
+                      name={media?.name}
+                      title={media?.title}
+                      release_date={media.release_date}
+                    />
+                  </Link>
                 </CarouselItem>
               ))}
         </CarouselContent>
