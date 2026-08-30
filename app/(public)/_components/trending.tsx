@@ -47,12 +47,12 @@ export default function Trending() {
         <CarouselContent>
           {isLoading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <CarouselItem key={i} className="basis-1/6">
+                <CarouselItem key={i} className="basis-1/5">
                   <MediaCardSkeleton />
                 </CarouselItem>
               ))
             : data?.results.map((media) => (
-                <CarouselItem key={media.id} className="basis-1/6">
+                <CarouselItem key={media.id} className="basis-1/5">
                   <MediaCard
                     poster_path={media.poster_path}
                     name={media?.name}
