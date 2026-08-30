@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="space-y-10">
       <Hero />
-      <div className="max-w-300 mx-auto space-y-10">
+      <div className="max-w-300 mx-auto space-y-10 px-4">
         <Trending />
         <Popular />
         <TopRated />
