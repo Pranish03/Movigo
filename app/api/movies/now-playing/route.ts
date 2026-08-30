@@ -7,7 +7,7 @@ export async function GET() {
     return NextResponse.json(data);
   } catch {
     return NextResponse.json(
-      { error: "Failed to fetch now playing" },
+      { error: "Failed to fetch now playing movies" },
       { status: 500 },
     );
   }
