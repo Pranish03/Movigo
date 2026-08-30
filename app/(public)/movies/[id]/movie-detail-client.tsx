@@ -2,6 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getMediaDetails } from "@/lib/api/media";
+import Image from "next/image";
+import { TMDB_IMAGE_BASE_URL } from "@/lib/constants";
+import { formatReleaseDate } from "@/utils/format-date";
+import { Badge } from "@/components/ui/badge";
+import { Play, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function MovieDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
@@ -11,11 +17,78 @@ export default function MovieDetailClient({ id }: { id: string }) {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
+  if (!data) return null;
 
   return (
     <div>
-      <h1>{data?.title}</h1>
-      <p>{data?.overview}</p>
+      <div className="relative h-[70vh] min-h-125 w-full overflow-hidden">
+        <Image
+          src={`${TMDB_IMAGE_BASE_URL}/original${data.backdrop_path}`}
+          alt={data.title || "backdrop image"}
+          fill
+          className="object-cover"
+          priority
+        />
+
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-black/50" />
+        <div className="absolute inset-0 bg-linear-to-t from-background from-0% via-background/70 via-40% to-transparent to-100%" />
+
+        <div className="max-w-300 mx-auto px-4 mt-30 relative z-10">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="relative w-48 md:w-64 aspect-2/3 rounded-xl overflow-hidden shrink-0 shadow-xl">
+              <Image
+                src={`${TMDB_IMAGE_BASE_URL}/w500${data.poster_path}`}
+                alt={data.title || "poster"}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="flex flex-col justify-start p-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                {data.title}
+              </h1>
+
+              <div className="flex flex-wrap items-center gap-3 mt-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1 text-foreground font-medium">
+                  <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                  {data.vote_average.toFixed(1)}
+                </div>
+                <span>•</span>
+                <span>{formatReleaseDate(data.release_date || "")}</span>
+                {data.runtime && (
+                  <>
+                    <span>•</span>
+                    <span>
+                      {Math.floor(data.runtime / 60)}h {data.runtime % 60}m
+                    </span>
+                  </>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-4">
+                {data.genres.map((genre) => (
+                  <Badge key={genre.id} variant="secondary">
+                    {genre.name}
+                  </Badge>
+                ))}
+              </div>
+
+              <div className="mt-6">
+                <Button size="lg" variant="outline" className="gap-2">
+                  <Play className="size-4 fill-current" />
+                  Watch Trailer
+                </Button>
+              </div>
+
+              <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
+                {data.overview}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

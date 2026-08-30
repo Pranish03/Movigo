@@ -15,6 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import Link from "next/link";
 
 export default function MoviesPage() {
   const [sortBy, setSortBy] = useState<SortOption>("popularity.desc");
@@ -73,14 +74,15 @@ export default function MoviesPage() {
               <MediaCardSkeleton key={i} />
             ))
           : data?.results.map((media) => (
-              <MediaCard
-                key={media.id}
-                poster_path={media.poster_path}
-                title={media?.title}
-                name={media?.name}
-                release_date={media?.release_date}
-                first_air_date={media?.first_air_date}
-              />
+              <Link key={media.id} href={`/movies/${media.id}`}>
+                <MediaCard
+                  poster_path={media.poster_path}
+                  title={media?.title}
+                  name={media?.name}
+                  release_date={media?.release_date}
+                  first_air_date={media?.first_air_date}
+                />
+              </Link>
             ))}
       </div>
 
