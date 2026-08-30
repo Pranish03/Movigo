@@ -7,17 +7,38 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import GenreCombobox from "../_components/genre-combobox";
 import SortingSelect, { SortOption } from "../_components/sorting-select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function TvShowsPage() {
   const [sortBy, setSortBy] = useState<SortOption>("popularity.desc");
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["tv", "discover", selectedGenres, sortBy],
-    queryFn: () => discoverMedia("tv", selectedGenres, sortBy),
+    queryKey: ["tv", "discover", selectedGenres, sortBy, page],
+    queryFn: () => discoverMedia("tv", selectedGenres, sortBy, page),
   });
 
   if (error) return <div>{error.message}</div>;
+
+  const totalPages = Math.min(data?.total_pages ?? 1, 500);
+
+  function handleGenreChange(genres: number[]) {
+    setSelectedGenres(genres);
+    setPage(1);
+  }
+
+  function handleSortChange(sort: SortOption) {
+    setSortBy(sort);
+    setPage(1);
+  }
 
   return (
     <div className="max-w-300 mx-auto px-4">
@@ -27,18 +48,19 @@ export default function TvShowsPage() {
         </h1>
 
         <div className="flex items-center gap-4 w-full">
-          <SortingSelect value={sortBy} onChange={setSortBy} />
+          <SortingSelect value={sortBy} onChange={handleSortChange} />
 
           <GenreCombobox
             mediaType="tv"
             value={selectedGenres}
-            onChange={setSelectedGenres}
+            onChange={handleGenreChange}
           />
         </div>
       </div>
-      <div className="grid grid-cols-6 gap-x-4 gap-y-6">
+
+      <div className="grid grid-cols-5 gap-x-4 gap-y-6">
         {isLoading
-          ? Array.from({ length: 12 }).map((_, i) => (
+          ? Array.from({ length: 10 }).map((_, i) => (
               <MediaCardSkeleton key={i} />
             ))
           : data?.results.map((media) => (
@@ -52,6 +74,34 @@ export default function TvShowsPage() {
               />
             ))}
       </div>
+
+      <Pagination className="mt-10 mb-6">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className={
+                page === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
+              }
+            />
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationLink isActive>{page}</PaginationLink>
+          </PaginationItem>
+
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              className={
+                page === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer"
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

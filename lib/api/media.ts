@@ -17,10 +17,12 @@ export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
   sortBy: string = "popularity.desc",
+  page: number = 1,
 ): Promise<MediaResponse> {
   const params = new URLSearchParams({
     media_type: mediaType,
     sort_by: sortBy,
+    page: page.toString(),
   });
 
   if (genreIds.length > 0) {
