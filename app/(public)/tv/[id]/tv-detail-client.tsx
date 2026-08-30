@@ -23,6 +23,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Link from "next/link";
+import MediaDetailSkeleton from "@/components/shared/media-detail-skeleton";
 
 export default function TvDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
@@ -40,7 +41,7 @@ export default function TvDetailClient({ id }: { id: string }) {
     queryFn: () => getSimilarMedia("tv", id),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <MediaDetailSkeleton />;
   if (error) return <div>{error.message}</div>;
   if (!data) return null;
 
