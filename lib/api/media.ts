@@ -13,6 +13,14 @@ type GenreResponse = {
   }[];
 };
 
+export type MediaDetails = Media & {
+  overview: string;
+  runtime?: number;
+  genres: { id: number; name: string }[];
+  backdrop_path: string;
+  vote_average: number;
+};
+
 export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
@@ -72,6 +80,17 @@ export async function getMediaGenres(
   const res = await fetch(`/api/media/genres?media_type=${mediaType}`);
 
   if (!res.ok) throw new Error(`Failed to fetch ${mediaType} genres`);
+
+  return res.json();
+}
+
+export async function getMediaDetails(
+  mediaType: string,
+  id: string,
+): Promise<MediaDetails> {
+  const res = await fetch(`/api/media/${mediaType}/${id}`);
+
+  if (!res.ok) throw new Error("Failed to fetch media details");
 
   return res.json();
 }
