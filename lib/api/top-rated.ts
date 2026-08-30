@@ -6,12 +6,12 @@ type PopularMediaResponse = {
   total_pages: number;
 };
 
-export async function getPopularMedia(
+export async function getTopRatedMedia(
   mediaType: string,
 ): Promise<PopularMediaResponse> {
-  const res = await fetch(`/api/popular?media_type=${mediaType}`);
+  const res = await fetch(`/api/top-rated?media_type=${mediaType}`);
 
-  if (!res.ok) throw new Error("Failed to fetch popular medias");
+  if (!res.ok) throw new Error("Failed to fetch top rated medias");
 
   return res.json();
 }
