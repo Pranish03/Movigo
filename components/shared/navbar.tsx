@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ModeToggle } from "./mode-toggle";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import SearchBar from "@/components/shared/search-bar";
 
 export default function Navbar() {
   return (
@@ -22,15 +21,7 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-4 flex-1 max-w-sm">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search movies & shows..."
-            className="pl-9"
-          />
-        </div>
-
+        <SearchBar />
         <ModeToggle />
       </div>
     </nav>
