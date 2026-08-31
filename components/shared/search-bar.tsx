@@ -69,7 +69,7 @@ export default function SearchBar() {
       />
 
       {open && debouncedQuery.trim().length > 1 && (
-        <div className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto rounded-lg border border-border bg-popover shadow-lg z-50">
+        <div className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto rounded-lg border border-border bg-popover shadow-lg z-50 scrollbar-none [&::-webkit-scrollbar]:hidden">
           {isFetching ? (
             <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
               <Loader2 className="size-4 animate-spin mr-2" />
