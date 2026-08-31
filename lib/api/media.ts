@@ -35,6 +35,19 @@ type CreditsResponse = {
   cast: CastMember[];
 };
 
+export type Video = {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+};
+
+type VideosResponse = {
+  results: Video[];
+};
+
 export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
@@ -127,6 +140,17 @@ export async function getSimilarMedia(
   const res = await fetch(`/api/media/${mediaType}/${id}/similar`);
 
   if (!res.ok) throw new Error("Failed to fetch similar media");
+
+  return res.json();
+}
+
+export async function getMediaVideos(
+  mediaType: string,
+  id: string,
+): Promise<VideosResponse> {
+  const res = await fetch(`/api/media/${mediaType}/${id}/videos`);
+
+  if (!res.ok) throw new Error("Failed to fetch videos");
 
   return res.json();
 }
