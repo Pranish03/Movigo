@@ -5,6 +5,7 @@ import {
   getMediaDetails,
   getMediaCredits,
   getSimilarMedia,
+  getMediaVideos,
 } from "@/lib/api/media";
 import Image from "next/image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/constants";
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import MediaDetailSkeleton from "@/components/shared/media-detail-skeleton";
+import TrailerDialog from "@/components/shared/trailer-dialog";
 
 export default function TvDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
@@ -39,6 +41,11 @@ export default function TvDetailClient({ id }: { id: string }) {
   const { data: similar, isLoading: isSimilarLoading } = useQuery({
     queryKey: ["tv", "similar", id],
     queryFn: () => getSimilarMedia("tv", id),
+  });
+
+  const { data: videos } = useQuery({
+    queryKey: ["tv", "videos", id],
+    queryFn: () => getMediaVideos("tv", id),
   });
 
   if (isLoading) return <MediaDetailSkeleton />;
@@ -110,12 +117,11 @@ export default function TvDetailClient({ id }: { id: string }) {
                 ))}
               </div>
 
-              <div className="mt-6">
-                <Button size="lg" variant="outline" className="gap-2">
-                  <Play className="size-4 fill-current" />
-                  Watch Trailer
-                </Button>
-              </div>
+              {videos?.results && (
+                <div className="mt-6">
+                  <TrailerDialog videos={videos.results} />
+                </div>
+              )}
 
               <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
                 {data.overview}

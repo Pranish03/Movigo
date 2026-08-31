@@ -19,13 +19,13 @@ export default function TrailerDialog({ videos }: TrailerDialogProps) {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button size="lg" variant="outline" className="gap-2">
-          <Play className="size-4 fill-current" />
-          Watch Trailer
-        </Button>
+      <DialogTrigger
+        render={<Button size="lg" variant="outline" className="gap-2" />}
+      >
+        <Play className="size-4 fill-current" />
+        Watch Trailer
       </DialogTrigger>
-      <DialogContent className="max-w-3xl p-0 overflow-hidden">
+      <DialogContent className="w-full max-w-[calc(100%-2rem)] sm:max-w-3xl p-0 overflow-hidden gap-0">
         <div className="aspect-video w-full">
           <iframe
             src={`https://www.youtube.com/embed/${trailer.key}?autoplay=1`}

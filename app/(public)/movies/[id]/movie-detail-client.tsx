@@ -5,13 +5,12 @@ import {
   getMediaDetails,
   getMediaCredits,
   getSimilarMedia,
+  getMediaVideos,
 } from "@/lib/api/media";
 import Image from "next/image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/constants";
 import { formatReleaseDate } from "@/utils/format-date";
 import { Badge } from "@/components/ui/badge";
-import { Play, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import CastCard from "@/components/shared/cast-card";
 import MediaCard from "@/components/shared/media-card";
 import MediaCardSkeleton from "@/components/shared/media-card-skeleton";
@@ -24,6 +23,8 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import MediaDetailSkeleton from "@/components/shared/media-detail-skeleton";
+import TrailerDialog from "@/components/shared/trailer-dialog";
+import { Star } from "lucide-react";
 
 export default function MovieDetailClient({ id }: { id: string }) {
   const { data, isLoading, error } = useQuery({
@@ -39,6 +40,11 @@ export default function MovieDetailClient({ id }: { id: string }) {
   const { data: similar, isLoading: isSimilarLoading } = useQuery({
     queryKey: ["movie", "similar", id],
     queryFn: () => getSimilarMedia("movie", id),
+  });
+
+  const { data: videos } = useQuery({
+    queryKey: ["movie", "videos", id],
+    queryFn: () => getMediaVideos("movie", id),
   });
 
   if (isLoading) return <MediaDetailSkeleton />;
@@ -101,12 +107,11 @@ export default function MovieDetailClient({ id }: { id: string }) {
                 ))}
               </div>
 
-              <div className="mt-6">
-                <Button size="lg" variant="outline" className="gap-2">
-                  <Play className="size-4 fill-current" />
-                  Watch Trailer
-                </Button>
-              </div>
+              {videos?.results && (
+                <div className="mt-6">
+                  <TrailerDialog videos={videos.results} />
+                </div>
+              )}
 
               <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
                 {data.overview}
