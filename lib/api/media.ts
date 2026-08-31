@@ -48,6 +48,10 @@ type VideosResponse = {
   results: Video[];
 };
 
+export type SearchResult = Media & {
+  media_type: "movie" | "tv" | "person";
+};
+
 export async function discoverMedia(
   mediaType: string,
   genreIds: number[] = [],
@@ -151,6 +155,20 @@ export async function getMediaVideos(
   const res = await fetch(`/api/media/${mediaType}/${id}/videos`);
 
   if (!res.ok) throw new Error("Failed to fetch videos");
+
+  return res.json();
+}
+
+type SearchResponse = {
+  results: SearchResult[];
+};
+
+export async function searchMedia(query: string): Promise<SearchResponse> {
+  const res = await fetch(
+    `/api/media/search?query=${encodeURIComponent(query)}`,
+  );
+
+  if (!res.ok) throw new Error("Failed to search");
 
   return res.json();
 }
